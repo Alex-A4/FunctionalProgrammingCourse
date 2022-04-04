@@ -17,14 +17,15 @@ abstract class ContentProvider<T> {
     if (T == ManualItem) return ManualItemProvider();
 
     throw UnsupportedError(
-        "The class $T is not supported by ContentProvider$getInstance");
+      'The class $T is not supported by ContentProvider.getInstance',
+    );
   }
 
   /// Проверяет, имеется ли подключение к интернету.
   /// Если нет, то будет выброшено исключение
   Future<void> hasConnectivity() async {
     //Checking internet connection
-    var connectivityResult = await (new Connectivity().checkConnectivity());
+    var connectivityResult = await (Connectivity().checkConnectivity());
 
     if (connectivityResult != ConnectivityResult.mobile &&
         connectivityResult != ConnectivityResult.wifi)
@@ -34,41 +35,45 @@ abstract class ContentProvider<T> {
   Future<List<T>> fetchList(String url);
 
   Future<T> fetchObject(String url);
+
+  List<T> parseList(String body);
+
+  T parseObject(String body);
 }
 
 class ManualItemProvider extends ContentProvider<ManualItem> {
   @override
   Future<List<ManualItem>> fetchList(String url) async {
     await hasConnectivity();
-
-    //Getting data
     final response = await http.get(url);
+    return parseList(response.body);
+  }
 
+  @override
+  List<ManualItem> parseList(String body) {
     List<ManualItem> items = [];
-
-    //Parsing data from page
-    var elements =
-        parse(response.body).getElementsByClassName('subcategory-image');
+    var elements = parse(body).getElementsByClassName('subcategory-image');
 
     for (int i = 0; i < elements.length; i++) {
       var body = elements[i].getElementsByTagName('a');
 
-      String imageUrl =
-          elements[i].getElementsByTagName('img')[0].attributes['src'];
-      String description =
-          body[0].attributes['title'].replaceFirst('<br/>', '\n');
+      String imageUrl = elements[i].getElementsByTagName('img')[0].attributes['src'];
+      String description = body[0].attributes['title'].replaceFirst('<br/>', '\n');
       String pageUrl = 'http://yar-zoo.ru${body[0].attributes['href']}';
 
-      items.add(new ManualItem(imageUrl, description, pageUrl));
+      items.add(ManualItem(imageUrl, description, pageUrl));
     }
-
     return items;
   }
 
   @override
   Future<ManualItem> fetchObject(String url) {
-    throw UnsupportedError(
-        "$fetchObject(url) is not suppurted by $ManualItemProvider()");
+    throw UnsupportedError('fetchObject(url) is not suppurted by ManualItemProvider()');
+  }
+
+  @override
+  ManualItem parseObject(String body) {
+    throw UnsupportedError('parseObject(body) is not suppurted by ManualItemProvider()');
   }
 }
 
@@ -78,28 +83,34 @@ class AnimalCategoryProvider extends ContentProvider<AnimalCategory> {
     await hasConnectivity();
 
     final response = await http.get(url);
+    return parseList(response.body);
+  }
 
+  @override
+  List<AnimalCategory> parseList(String body) {
     List<AnimalCategory> animals = [];
 
     //Parsing data from page
-    var body = parse(response.body).getElementsByClassName('item-image');
+    var bodyData = parse(body).getElementsByClassName('item-image');
 
     for (int i = 0; i < body.length; i++) {
-      String title = body[i].getElementsByTagName('a')[0].attributes['title'];
-      String pageUrl = body[i].getElementsByTagName('a')[0].attributes['href'];
-      String imageUrl =
-          body[i].getElementsByTagName('img')[0].attributes['src'];
+      String title = bodyData[i].getElementsByTagName('a')[0].attributes['title'];
+      String pageUrl = bodyData[i].getElementsByTagName('a')[0].attributes['href'];
+      String imageUrl = bodyData[i].getElementsByTagName('img')[0].attributes['src'];
 
-      animals.add(new AnimalCategory(pageUrl, imageUrl, title));
+      animals.add(AnimalCategory(pageUrl, imageUrl, title));
     }
-
     return animals;
   }
 
   @override
   Future<AnimalCategory> fetchObject(String url) async {
-    throw UnsupportedError(
-        "$fetchObject(url) is not suppurted by $AnimalCategoryProvider()");
+    throw UnsupportedError('fetchObject(url) is not suppurted by AnimalCategoryProvider()');
+  }
+
+  @override
+  AnimalCategory parseObject(String body) {
+    throw UnsupportedError('parseObject(body) is not suppurted by AnimalCategoryProvider()');
   }
 }
 
@@ -111,14 +122,17 @@ class NewsProvider extends ContentProvider<News> {
     await hasConnectivity();
 
     final response = await http.get(url);
+    return parseList(response.body);
+  }
 
+  @override
+  List<News> parseList(String body) {
     List<News> news = [];
 
     //Parsing data from page
-    var dateParse =
-        parse(response.body).getElementsByClassName('element-itempublish_up');
-    var descr = parse(response.body).getElementsByClassName('element-textarea');
-    var docs = parse(response.body).getElementsByClassName('item-image');
+    var dateParse = parse(body).getElementsByClassName('element-itempublish_up');
+    var descr = parse(body).getElementsByClassName('element-textarea');
+    var docs = parse(body).getElementsByClassName('item-image');
 
     for (int i = 0; i < docs.length; i++) {
       var pageHref = docs[i].getElementsByTagName('a')[0].attributes['href'];
@@ -126,7 +140,7 @@ class NewsProvider extends ContentProvider<News> {
       var image = docs[i].getElementsByTagName('img')[0].attributes['src'];
       var description = descr[i].getElementsByTagName('p')[0].text;
       var date = dateParse[i].text.trim();
-      news.add(new News(title, description, image, date, pageHref));
+      news.add(News(title, description, image, date, pageHref));
     }
 
     return news;
@@ -134,16 +148,24 @@ class NewsProvider extends ContentProvider<News> {
 
   @override
   Future<News> fetchObject(String url) {
-    throw UnsupportedError(
-        "$fetchObject(url) is not suppurted by $NewsProvider()");
+    throw UnsupportedError('fetchObject(url) is not suppurted by NewsProvider()');
+  }
+
+  @override
+  News parseObject(String body) {
+    throw UnsupportedError('parseObject(body) is not suppurted by NewsProvider()');
   }
 }
 
 class AnimalProvider extends ContentProvider<Animal> {
   @override
   Future<List<Animal>> fetchList(String url) {
-    throw UnsupportedError(
-        "$fetchList(url) is not suppurted by $AnimalProvider()");
+    throw UnsupportedError('fetchList(url) is not suppurted by AnimalProvider()');
+  }
+
+  @override
+  List<Animal> parseList(String body) {
+    throw UnsupportedError('parseList(body) is not suppurted by AnimalProvider()');
   }
 
   @override
@@ -151,22 +173,23 @@ class AnimalProvider extends ContentProvider<Animal> {
     await hasConnectivity();
 
     final response = await http.get(url);
+    return parseObject(response.body);
+  }
 
-    Map<String, String> tabItems = new Map();
-    var textAreas =
-        parse(response.body).getElementsByClassName('element-textarea');
-    var itemRows = parse(response.body)
+  @override
+  Animal parseObject(String body) {
+    Map<String, String> tabItems = Map();
+    var textAreas = parse(body).getElementsByClassName('element-textarea');
+    var itemRows = parse(body)
         .getElementsByClassName('item-tabs')[0]
         .getElementsByTagName('ul')[0]
         .getElementsByTagName('li');
-    var zooPlacement =
-        parse(response.body).getElementsByClassName('element-text');
+    var zooPlacement = parse(body).getElementsByClassName('element-text');
 
     //Is there right tagging
     int isRight = 1;
     String description = '';
-    description +=
-        '${zooPlacement[0].text.trim().replaceAll('<\/?[\w]+>', '')}\n';
+    description += '${zooPlacement[0].text.trim().replaceAll('<\/?[\w]+>', '')}\n';
 
     if (textAreas.length == itemRows.length) isRight = 0;
 
@@ -181,28 +204,30 @@ class AnimalProvider extends ContentProvider<Animal> {
         description += '${descrP[i].text.replaceAll('<\/?[\w]+>', '')}\n';
     } else {
       for (int i = 1; i < zooPlacement.length; i++)
-        description +=
-            '${zooPlacement[i].text.trim().replaceAll('<\/?[\w]+>', '')}\n';
+        description += '${zooPlacement[i].text.trim().replaceAll('<\/?[\w]+>', '')}\n';
     }
 
     //Building items of tab
     for (int i = 0; i < itemRows.length; i++) {
       String tabName = itemRows[i].getElementsByTagName('a')[0].text.trim();
-      String tabText =
-          textAreas[i + isRight].getElementsByTagName('p')[0].text.trim();
+      String tabText = textAreas[i + isRight].getElementsByTagName('p')[0].text.trim();
 
       tabItems['$tabName'] = tabText;
     }
 
-    return new Animal(description.trim(), tabItems);
+    return Animal(description.trim(), tabItems);
   }
 }
 
 class FullNewsProvider extends ContentProvider<FullNews> {
   @override
   Future<List<FullNews>> fetchList(String url) {
-    throw UnsupportedError(
-        "$fetchList(url) is not suppurted by $FullNewsProvider()");
+    throw UnsupportedError('fetchList(url) is not suppurted by FullNewsProvider()');
+  }
+
+  @override
+  List<FullNews> parseList(String body) {
+    throw UnsupportedError('parseList(body) is not suppurted by FullNewsProvider()');
   }
 
   @override
@@ -210,23 +235,22 @@ class FullNewsProvider extends ContentProvider<FullNews> {
     await hasConnectivity();
 
     final response = await http.get(url);
+    return parseObject(response.body);
+  }
 
+  @override
+  FullNews parseObject(String body) {
     List<String> imagesUrl = [];
     //Parsing data from page
-    var titleAndImage =
-        parse(response.body).getElementsByClassName('jbimage-link');
-    var descr = parse(response.body)
-        .getElementsByClassName('element-textarea')[0]
-        .getElementsByTagName('p');
-    var gallery =
-        parse(response.body).getElementsByClassName('element-jbgallery');
+    var titleAndImage = parse(body).getElementsByClassName('jbimage-link');
+    var descr = parse(body).getElementsByClassName('element-textarea')[0].getElementsByTagName('p');
+    var gallery = parse(body).getElementsByClassName('element-jbgallery');
 
     //Parsing gallery of photos if it is exist in a news
     if (gallery.length > 0) {
       gallery = gallery[0].getElementsByTagName('a');
       //Adding images to list
-      for (int i = 0; i < gallery.length; i++)
-        imagesUrl.add(gallery[i].attributes['href']);
+      for (int i = 0; i < gallery.length; i++) imagesUrl.add(gallery[i].attributes['href']);
     }
 
     var title = '';
@@ -241,7 +265,7 @@ class FullNewsProvider extends ContentProvider<FullNews> {
       description += descr[i].text + '\n';
     }
 
-    FullNews news = new FullNews(image, title, description, imagesUrl);
+    FullNews news = FullNews(image, title, description, imagesUrl);
     return news;
   }
 }

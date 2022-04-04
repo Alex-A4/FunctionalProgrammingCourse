@@ -28,8 +28,6 @@ class Store<T> {
           .fetchList(url)
           .then((list) => this.updateData(list))
           .catchError((e, trace) {
-        print(e);
-        print(trace);
         _subject.addError(e);
       });
   }
@@ -39,8 +37,6 @@ class Store<T> {
         .fetchList(url)
         .then((list) => this.updateData(list))
         .catchError((e, trace) {
-      print(e);
-      print(trace);
       _subject.addError(e);
     });
   }
