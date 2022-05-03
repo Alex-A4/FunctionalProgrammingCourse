@@ -9,8 +9,7 @@ import 'app.dart';
 class AppBloc extends Bloc<AppBlocEvent, AppBlocState> {
   final newsStore = Store<News>(basicUrl: 'http://yar-zoo.ru/home/news.html');
   final categoryStore = Store<AnimalCategory>();
-  final manualStore =
-      Store<ManualItem>(basicUrl: 'http://yar-zoo.ru/animals.html');
+  final manualStore = Store<ManualItem>(basicUrl: 'http://yar-zoo.ru/animals.html');
 
   @override
   AppBlocState get initialState => NewsState();
