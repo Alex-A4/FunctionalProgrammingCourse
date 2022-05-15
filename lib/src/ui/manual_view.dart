@@ -9,7 +9,7 @@ import 'animals_category.dart';
 /// Class describes main page of zoo manual
 /// This page contains categories of animals
 
-class ManualCategoryWidget extends StatelessWidget {
+class ManualCategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final store = Provider.of<AppBloc>(context).manualStore;
@@ -73,7 +73,7 @@ class ManualCategoryListItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AnimalsCategoryWidget(item),
+          builder: (context) => DetailedAnimalScreen(item),
         ));
       },
       child: Card(

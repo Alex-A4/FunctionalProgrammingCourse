@@ -5,7 +5,7 @@ import 'package:zoo_mobile/src/models/news/news.dart';
 import 'package:zoo_mobile/src/widgets/downloading_widgets.dart';
 import 'full_news_viewer.dart';
 
-class NewsView extends StatelessWidget {
+class NewsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<AppBloc>(context);
@@ -62,7 +62,7 @@ class _NewsListItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => FullNewsViewer(_news.pageUrl)),
+          MaterialPageRoute(builder: (context) => FullNewsScreen(_news.pageUrl)),
         );
       },
       child: Column(

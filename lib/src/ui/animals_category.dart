@@ -6,11 +6,11 @@ import 'package:zoo_mobile/src/models/manual/manual_item.dart';
 import 'package:zoo_mobile/src/widgets/downloading_widgets.dart';
 import 'animals_viewer.dart';
 
-///Class to display list of animals by specified category
-class AnimalsCategoryWidget extends StatelessWidget {
+/// Class to display list of animals by specified category
+class DetailedAnimalScreen extends StatelessWidget {
   final ManualItem manualItem;
 
-  AnimalsCategoryWidget(this.manualItem);
+  DetailedAnimalScreen(this.manualItem);
 
   @override
   Widget build(BuildContext context) {

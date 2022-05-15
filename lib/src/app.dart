@@ -24,9 +24,9 @@ class App extends StatelessWidget {
           stream: bloc.state,
           builder: (_, snap) {
             if (!snap.hasData) return Container();
-            if (snap.data is NewsState) return NewsView();
-            if (snap.data is AboutState) return AboutUsView();
-            if (snap.data is ManualState) return ManualCategoryWidget();
+            if (snap.data is NewsState) return NewsScreen();
+            if (snap.data is AboutState) return AboutScreen();
+            if (snap.data is ManualState) return ManualCategoryScreen();
 
             if (snap.hasError) print(snap.error);
 

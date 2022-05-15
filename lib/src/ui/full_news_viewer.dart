@@ -4,10 +4,10 @@ import 'package:zoo_mobile/src/models/news/full_news.dart';
 import 'package:zoo_mobile/src/widgets/clickable_image.dart';
 import 'package:zoo_mobile/src/widgets/downloading_widgets.dart';
 
-class FullNewsViewer extends StatelessWidget {
+class FullNewsScreen extends StatelessWidget {
   final String newsUrl;
 
-  FullNewsViewer(this.newsUrl);
+  FullNewsScreen(this.newsUrl);
 
   @override
   Widget build(BuildContext context) {
