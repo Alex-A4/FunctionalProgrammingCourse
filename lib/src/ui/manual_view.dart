@@ -73,7 +73,7 @@ class ManualCategoryListItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DetailedAnimalScreen(item),
+          builder: (context) => DetailedCategoryAnimalScreen(item),
         ));
       },
       child: Card(

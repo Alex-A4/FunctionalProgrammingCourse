@@ -7,10 +7,10 @@ import 'package:zoo_mobile/src/widgets/downloading_widgets.dart';
 import 'animals_viewer.dart';
 
 /// Class to display list of animals by specified category
-class DetailedAnimalScreen extends StatelessWidget {
+class DetailedCategoryAnimalScreen extends StatelessWidget {
   final ManualItem manualItem;
 
-  DetailedAnimalScreen(this.manualItem);
+  DetailedCategoryAnimalScreen(this.manualItem);
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +85,7 @@ class _AnimalsCategoryItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => AnimalsViewer(_category)),
+          MaterialPageRoute(builder: (context) => DetailedAnimalScreen(_category)),
         );
       },
       child: Card(

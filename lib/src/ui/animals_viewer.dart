@@ -4,16 +4,16 @@ import 'package:zoo_mobile/src/models/manual/animals.dart';
 import 'package:zoo_mobile/src/models/manual/animals_category_data.dart';
 import 'package:zoo_mobile/src/widgets/downloading_widgets.dart';
 
-class AnimalsViewer extends StatefulWidget {
+class DetailedAnimalScreen extends StatefulWidget {
   final AnimalCategory category;
 
-  AnimalsViewer(this.category);
+  DetailedAnimalScreen(this.category);
 
   @override
   _AnimalsViewerState createState() => _AnimalsViewerState();
 }
 
-class _AnimalsViewerState extends State<AnimalsViewer> with TickerProviderStateMixin {
+class _AnimalsViewerState extends State<DetailedAnimalScreen> with TickerProviderStateMixin {
   TabController _controller;
 
   @override
