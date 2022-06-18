@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zoo_mobile/src/content_providers/content_provider.dart';
+import 'package:zoo_mobile/src/content_providers/store_single.dart';
 import 'package:zoo_mobile/src/models/manual/animals.dart';
 import 'package:zoo_mobile/src/models/manual/animals_category_data.dart';
 import 'package:zoo_mobile/src/widgets/downloading_widgets.dart';
@@ -15,12 +15,20 @@ class DetailedAnimalScreen extends StatefulWidget {
 
 class _AnimalsViewerState extends State<DetailedAnimalScreen> with TickerProviderStateMixin {
   TabController _controller;
+  StoreSingle<Animal> store;
+
+  @override
+  void initState() {
+    store = StoreSingle<Animal>(basicUrl: widget.category.pageUrl);
+    store.forceLoad();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: ContentProvider.getInstance<Animal>().fetchObject(widget.category.pageUrl),
+      body: StreamBuilder(
+        stream: store.stream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _controller = TabController(

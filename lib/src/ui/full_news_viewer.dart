@@ -1,19 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:zoo_mobile/src/content_providers/content_provider.dart';
+import 'package:zoo_mobile/src/content_providers/store_single.dart';
 import 'package:zoo_mobile/src/models/news/full_news.dart';
 import 'package:zoo_mobile/src/widgets/clickable_image.dart';
 import 'package:zoo_mobile/src/widgets/downloading_widgets.dart';
 
-class FullNewsScreen extends StatelessWidget {
+class FullNewsScreen extends StatefulWidget {
   final String newsUrl;
 
   FullNewsScreen(this.newsUrl);
 
   @override
+  State<FullNewsScreen> createState() => _FullNewsScreenState();
+}
+
+class _FullNewsScreenState extends State<FullNewsScreen> {
+  StoreSingle<FullNews> store;
+
+  @override
+  void initState() {
+    store = StoreSingle<FullNews>(basicUrl: widget.newsUrl);
+    store.forceLoad();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: ContentProvider.getInstance<FullNews>().fetchObject(newsUrl),
+      body: StreamBuilder(
+        stream: store.stream,
         builder: (context, snapshot) {
           //If data downloaded
           if (snapshot.hasData) {

@@ -2,7 +2,7 @@ import 'package:rxdart/rxdart.dart';
 
 import 'content_provider.dart';
 
-/// Базовый класс хранилища данных
+/// Базовый класс хранилища данных списка объектов
 class Store<T> {
   final String basicUrl;
 
