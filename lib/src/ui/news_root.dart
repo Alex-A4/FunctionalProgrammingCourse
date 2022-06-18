@@ -41,13 +41,11 @@ class NewsScreen extends StatelessWidget {
   }
 
   Widget getListView(List<News> news) {
-    return ListView.builder(
-        key: PageStorageKey('NewsKey'),
-        padding: EdgeInsets.only(top: 8.0),
-        itemCount: news.length,
-        itemBuilder: (BuildContext context, int pos) {
-          return _NewsListItem(news[pos]);
-        });
+    return ListView(
+      key: PageStorageKey('NewsKey'),
+      padding: EdgeInsets.only(top: 8.0),
+      children: news.map((e) => _NewsListItem(e)).toList(),
+    );
   }
 }
 

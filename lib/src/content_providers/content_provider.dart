@@ -54,15 +54,15 @@ class ManualItemProvider extends ContentProvider<ManualItem> {
     List<ManualItem> items = [];
     var elements = parse(body).getElementsByClassName('subcategory-image');
 
-    for (int i = 0; i < elements.length; i++) {
-      var body = elements[i].getElementsByTagName('a');
+    items = elements.map((element) {
+      var body = element.getElementsByTagName('a');
 
-      String imageUrl = elements[i].getElementsByTagName('img')[0].attributes['src'];
+      String imageUrl = element.getElementsByTagName('img')[0].attributes['src'];
       String description = body[0].attributes['title'].replaceFirst('<br/>', '\n');
       String pageUrl = 'http://yar-zoo.ru${body[0].attributes['href']}';
 
-      items.add(ManualItem(imageUrl, description, pageUrl));
-    }
+      return ManualItem(imageUrl, description, pageUrl);
+    }).toList();
     return items;
   }
 
@@ -93,13 +93,13 @@ class AnimalCategoryProvider extends ContentProvider<AnimalCategory> {
     //Parsing data from page
     var bodyData = parse(body).getElementsByClassName('item-image');
 
-    for (int i = 0; i < body.length; i++) {
-      String title = bodyData[i].getElementsByTagName('a')[0].attributes['title'];
-      String pageUrl = bodyData[i].getElementsByTagName('a')[0].attributes['href'];
-      String imageUrl = bodyData[i].getElementsByTagName('img')[0].attributes['src'];
+    animals = bodyData.map((data) {
+      String title = data.getElementsByTagName('a')[0].attributes['title'];
+      String pageUrl = data.getElementsByTagName('a')[0].attributes['href'];
+      String imageUrl = data.getElementsByTagName('img')[0].attributes['src'];
 
-      animals.add(AnimalCategory(pageUrl, imageUrl, title));
-    }
+      return AnimalCategory(pageUrl, imageUrl, title);
+    }).toList();
     return animals;
   }
 
@@ -250,7 +250,7 @@ class FullNewsProvider extends ContentProvider<FullNews> {
     if (gallery.length > 0) {
       gallery = gallery[0].getElementsByTagName('a');
       //Adding images to list
-      for (int i = 0; i < gallery.length; i++) imagesUrl.add(gallery[i].attributes['href']);
+      imagesUrl = gallery.map((e) => e.attributes['href']).toList();
     }
 
     var title = '';
@@ -261,9 +261,7 @@ class FullNewsProvider extends ContentProvider<FullNews> {
     }
     //Building description
     String description = '';
-    for (int i = 0; i < descr.length; i++) {
-      description += descr[i].text + '\n';
-    }
+    description = descr.map((e) => e.text).reduce((value, iter) => value + '\n' + iter);
 
     FullNews news = FullNews(image, title, description, imagesUrl);
     return news;
